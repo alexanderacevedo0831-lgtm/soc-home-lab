@@ -181,10 +181,11 @@ PowerShell is used by IT, Intune, software installers, and legit automation. Red
 
 ## 10. Artifacts checklist (attach screenshots when exporting portfolio)
 
-- [ ] Atomic success lines for T1059.001-17
-- [ ] Event Viewer 4104 detail (full Message)
-- [ ] Sysmon ID 1 or 4688 with cmdline
-- [ ] This CASE.md
+- [x] Atomic success lines for T1059.001-17 plus 4104 hunt query results: [terminal](./screenshots/01-atomic-run-and-4104-hunt-terminal.png)
+- [x] Event Viewer 4104 script blocks at 2026-09-19 16:26:52: [Event Viewer](./screenshots/02-event-viewer-4104-scriptblocks.png)
+- [ ] Sysmon ID 1 or 4688 with cmdline (optional)
+- [x] Noise triage example: Sysmon 11 tagged T1574.010 was svchost (SYSTEM) writing to Prefetch on 09-21, unrelated to the test, so benign: [Sysmon 11](./screenshots/noise-triage-sysmon11-prefetch.png)
+- [x] This CASE.md
 
 ---
 

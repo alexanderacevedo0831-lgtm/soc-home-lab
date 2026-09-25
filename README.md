@@ -26,6 +26,7 @@ Purple-team style home lab portfolio for **SOC analyst** skill-building: emulate
 - Confirmed **4104** scriptblock telemetry at execution time
 - Documented escalate / contain / block playbook (stretch — detect lab first)
 - Visuals: tooling stack + Detect vs Block
+- Evidence screenshots in [screenshots/](./01-t1059-001-powershell/screenshots/), including a false-positive triage example
 
 See [CASE.md](./01-t1059-001-powershell/CASE.md).
 
@@ -35,6 +36,19 @@ See [CASE.md](./01-t1059-001-powershell/CASE.md).
 |---------|------|
 | Sensor vs simulator stack | [soc-lab1-tooling-stack.png](./01-t1059-001-powershell/diagrams/soc-lab1-tooling-stack.png) |
 | Detect vs Block | [detect-vs-block.png](./01-t1059-001-powershell/diagrams/detect-vs-block.png) |
+
+## Threat context: why these labs, in this order
+
+Labs are chosen by working backwards from what attackers want. Most intrusions are financially motivated, and ransomware crews often buy access from Initial Access Brokers, so the cheapest place to stop them is the first few days after login.
+
+| Slide | File |
+|-------|------|
+| Who's who in the attack economy (CIS, DPRK, IAB, infostealers) | [attacker-terms-map.png](./threat-context/attacker-terms-map.png) |
+| How access gets sold: the criminal supply chain | [iab-forum-supply-chain.png](./threat-context/iab-forum-supply-chain.png) |
+| From bought access to payday: hospital scenario | [iab-to-payday-hospital.png](./threat-context/iab-to-payday-hospital.png) |
+| Ransomware kill-path vs. hospital, detect + contain per step | [healthcare-ransomware-kill-path.png](./threat-context/healthcare-ransomware-kill-path.png) |
+
+Sources: Mandiant M-Trends, Microsoft Digital Defense Report, public reporting on the 2024 Change Healthcare incident. The forum listing on the supply-chain slide is illustrative, not real.
 
 ## What this shows employers
 
