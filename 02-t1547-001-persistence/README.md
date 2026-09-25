@@ -1,7 +1,12 @@
-# Lab 02 — Boot/Logon Autostart (T1547.001)
+# Lab 02: Registry Run Key Persistence (T1547.001)
 
-**Status:** Planned (next)
+**Status:** Complete (detect + contain + verify)
 
-**Goal:** After Lab 1’s PowerShell execution, practice adversary **persistence** via a Registry Run key, then **contain**: remove the value, kill related processes, verify with Sysmon, document in `CASE.md`.
+Emulated Atomic `T1547.001` test #1 on SOC-LAB1, detected the Run key write with Sysmon 1 + 13 (correlated by ProcessGuid), then contained it manually and verified after a fresh logon.
 
-Do not run until Lab 1 CASE + screenshots are committed.
+| Item | Link |
+|------|------|
+| Case writeup | [CASE.md](./CASE.md) |
+| Evidence screenshots | [screenshots/](./screenshots/) |
+| Diagrams | [persistence-lifecycle.png](./diagrams/persistence-lifecycle.png), [processguid-correlation.png](./diagrams/processguid-correlation.png) |
+| Diagram source | [src/](./src/) |

@@ -18,7 +18,8 @@ Purple-team style home lab portfolio for **SOC analyst** skill-building: emulate
 | # | Folder | Technique | Focus | Status |
 |---|--------|-----------|--------|--------|
 | 01 | [01-t1059-001-powershell](./01-t1059-001-powershell/) | T1059.001 PowerShell | Detect + investigate + CASE | **Complete (detect)** |
-| 02 | [02-t1547-001-persistence](./02-t1547-001-persistence/) | T1547.001 Registry Run Keys | Persist + **contain** | Planned |
+| 02 | [02-t1547-001-persistence](./02-t1547-001-persistence/) | T1547.001 Registry Run Keys | Persist + **contain** + verify | **Complete (contain)** |
+| 03 | — | T1003 Credential Dumping | Detect LSASS access + harden | Next |
 
 ## Lab 01 highlights
 
@@ -30,12 +31,25 @@ Purple-team style home lab portfolio for **SOC analyst** skill-building: emulate
 
 See [CASE.md](./01-t1059-001-powershell/CASE.md).
 
-## Diagrams (Lab 01)
+## Lab 02 highlights
 
-| Diagram | File |
-|---------|------|
-| Sensor vs simulator stack | [soc-lab1-tooling-stack.png](./01-t1059-001-powershell/diagrams/soc-lab1-tooling-stack.png) |
-| Detect vs Block | [detect-vs-block.png](./01-t1059-001-powershell/diagrams/detect-vs-block.png) |
+- Emulated **only** Atomic `T1547.001` test **#1** (Reg Key Run)
+- Detected the Run key write with **Sysmon 1 + 13**, correlated by a shared **ProcessGuid** (31 ms apart)
+- Caught a Sysmon config **mislabel** (T1012 tag on a `REG ADD`): the command line is the truth, tags are hints
+- **Contained** by hand: evidence export, payload check, value removal, autostart sweep; **verified** after a fresh logon
+- Sigma rule + PowerShell / KQL hunts written as detection recommendations
+- Evidence screenshots in [screenshots/](./02-t1547-001-persistence/screenshots/)
+
+See [CASE.md](./02-t1547-001-persistence/CASE.md).
+
+## Diagrams
+
+| Lab | Diagram | File |
+|-----|---------|------|
+| 01 | Sensor vs simulator stack | [soc-lab1-tooling-stack.png](./01-t1059-001-powershell/diagrams/soc-lab1-tooling-stack.png) |
+| 01 | Detect vs Block | [detect-vs-block.png](./01-t1059-001-powershell/diagrams/detect-vs-block.png) |
+| 02 | Run key lifecycle: attack, detect, contain, verify | [persistence-lifecycle.png](./02-t1547-001-persistence/diagrams/persistence-lifecycle.png) |
+| 02 | Process tree + ProcessGuid event correlation | [processguid-correlation.png](./02-t1547-001-persistence/diagrams/processguid-correlation.png) |
 
 ## Threat context: why these labs, in this order
 
@@ -55,7 +69,7 @@ Sources: Mandiant M-Trends, Microsoft Digital Defense Report, public reporting o
 - MITRE mapping and scoped emulation (not “run all atomics”)
 - Host-based detection literacy (Sysmon / 4104 / 4688)
 - Investigation writeups that separate **detect** from **block**
-- Progression toward containment (Lab 02+)
+- Progression from detection to hands-on containment and verification (Lab 02)
 
 ## Disclaimer
 
