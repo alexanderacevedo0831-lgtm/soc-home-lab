@@ -11,6 +11,9 @@
 | **MITRE ATT&CK** | [T1547.001](https://attack.mitre.org/techniques/T1547/001/): Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder |
 | **Emulation** | Atomic Red Team `T1547.001` Test **#1** "Reg Key Run" only |
 
+
+**Security+ SY0-701 domains reinforced:** Domain 2 (Threats, Vulnerabilities & Mitigations), Domain 4 (Security Operations)
+
 ---
 
 ## 1. Executive summary
@@ -349,3 +352,13 @@ DeviceRegistryEvents
 - [ ] Screenshot of the Sysmon removal (add/delete) event (confirmed on VM, not captured)
 - [x] Evidence export `runkey-evidence.reg` (saved to the VM desktop, not published in this repo)
 - [x] This CASE.md
+
+---
+
+## Hunt Note (analyst mindset)
+
+1. **Baseline:** On SOC-LAB1 the known-good autostarts are HKCU Run `OneDrive` and `Edge`, and HKLM Run `SecurityHealth` and `VBoxTray`, all pointing at vendor binaries in standard install paths. A new Run value, especially one written by `reg.exe` from `cmd.exe` or pointing at an unusual path like `C:\Path\AtomicRedTeam.exe`, is the anomaly.
+2. **Attacker goal:** Survive reboots and logoffs without needing admin (HKCU is user-writable), so access is not lost when the first process dies or the machine restarts.
+3. **Blast radius:** Whatever the payload does runs again at every logon of that user, with that user's rights. If the key is in HKLM it affects every user. Persistence also means a reboot or password reset alone does not evict the attacker.
+4. **Next ATT&CK step:** With a stable foothold, intruders typically move to credential access such as LSASS memory dumping (T1003.001, Lab 3), then discovery and lateral movement (for example T1021).
+5. **What automation/AI triage might miss:** An allowlist keyed only on value name (for example anything called `OneDrive`) lets a masquerading entry through (false negative), and rules that watch only HKCU Run miss RunOnce, HKLM, or the Startup folder. Software updates that rewrite legitimate values can fire as false positives. A human should check the full image path and signer, who wrote the value (Sysmon 1 + 13 joined on ProcessGuid), whether the payload exists or ran, and sweep the other autostart locations, as done in this case.

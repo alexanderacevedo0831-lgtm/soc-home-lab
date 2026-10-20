@@ -11,6 +11,9 @@
 | **MITRE ATT&CK** | [T1059.001](https://attack.mitre.org/techniques/T1059/001/) — Command and Scripting Interpreter: PowerShell |
 | **Emulation** | Atomic Red Team — `T1059.001` Test **#17** only |
 
+
+**Security+ SY0-701 domains reinforced:** Domain 2 (Threats, Vulnerabilities & Mitigations), Domain 4 (Security Operations)
+
 ---
 
 ## 1. Executive summary
@@ -192,3 +195,13 @@ PowerShell is used by IT, Intune, software installers, and legit automation. Red
 ## 11. Next lab (level-up)
 
 **Lab 2 (planned):** After initial PowerShell execution, adversaries often **persist**. Lab 2 will emulate a **Registry Run key** persistence technique (MITRE **T1547.001**), detect it with Sysmon registry events, then practice **containment**: remove the Run key, kill related processes, optional network isolate, and verify the persistence is gone. Goal: move from "I found it" to "I stopped the blast radius."
+
+---
+
+## Hunt Note (analyst mindset)
+
+1. **Baseline:** On SOC-LAB1, normal PowerShell is interactive admin work by `soclab1` from `explorer.exe`, plus system tasks (Windows Update, Defender, installers) running from expected parents. Normal 4104 script blocks are readable cmdlets, not `-enc` blobs, `IEX`, or download cradles. Anything with an odd parent (Office, `wscript`, `msiexec`), encoded commands, or network-fetching code is the anomaly.
+2. **Attacker goal:** PowerShell is built in, signed, and trusted, so an adversary gets full scripting, .NET access, and in-memory execution without dropping a new binary. It is used for discovery, downloading the next stage, and running payloads while blending with admin activity.
+3. **Blast radius:** Code runs with the rights of the user who launched it. On this host that means the user profile, any reachable shares, cached credentials, and (if elevated) the whole machine. From there it becomes the launch point for persistence and lateral movement.
+4. **Next ATT&CK step:** Usually persistence such as Registry Run keys (T1547.001, Lab 2) or scheduled tasks (T1053.005), plus discovery (T1082, T1087) and later credential access such as LSASS dumping (T1003.001, Lab 3).
+5. **What automation/AI triage might miss:** A pipeline that allowlists `powershell.exe` from IT tooling, or scores on keywords only, can miss obfuscated or split script blocks (false negative), or if 4104 logging is off there is nothing to score. The reverse is also true: legit admin and installer scripts trigger keyword rules (false positive), and noise like the Sysmon 11 Prefetch event tagged T1574.010 can be mislabeled. A human should check the parent/child chain, the user context, the full 4104 content (reassembling multi-part blocks), and whether the timing lines up with known admin work.
